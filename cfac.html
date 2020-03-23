@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Smallish C program to compute 100!</title>
+</head>
+
+<body>
+	<div>
+		<a href="/">Home</a>
+		<hr>
+	</div>
+
+	<h1>Smallish C program to compute 100!</h1>
+
+	<p>
+		My solution for Project Euler problem 20, base used is 10^9, simple schoolbook multiplication algorithm. ~281 bytes. Certainly not the smallest possible.
+	</p>
+<p>
+<pre style="width:60%; min-width:300px; white-space: pre-line;">
+&#35;include&nbsp;&lt;stdio.h&gt;
+&#35;include&nbsp;&lt;stdint.h&gt;
+const&nbsp;uint32_t&nbsp;B=1e9&#59;
+&#35;define&nbsp;N&nbsp;18
+int&nbsp;main(){uint32_t&nbsp;r[N]={479001600},a,k&#59;uint64_t&nbsp;d&#59;int&nbsp;i&#59;for(a=13&#59;a&lt;=100&#59;a++)for(i=0,k=0&#59;i&lt;N&#59;r[i++]=d%B,k=d/B)d=(uint64_t)r[i]*a+k&#59;for(i=0,a=0&#59;i&lt;N&#59;i++)for(k=r[i]&#59;k&#59;k/=10)a+=k%10&#59;printf("%d\n",a)&#59;return&nbsp;0&#59;}
+</pre>
+
+</p>
+
+<div>
+	<p>
+		<hr>
+		<a href="/">Up</a> | <a href="mailto:watchingwaterfalls@gmail.com">Contact</a>
+	</p>
+</div>
+
+</body>
+
+</html>
