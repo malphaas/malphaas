@@ -66,102 +66,99 @@
 		Program was written in C++, takes n the bounding value and s the size of the output image in pixels as arguments. Output is a "P2" PPM image emitted to stdout. Not the most optimized or well written program, it was written quickly for the purposes of investigating this sequence.
 	</p>
 
-	<p>
-		<pre>
-&#35;include&nbsp;&lt;iostream&gt;
-&#35;include&nbsp;&lt;fstream&gt;
-&#35;include&nbsp;&lt;vector&gt;
-&#35;include&nbsp;&lt;algorithm&gt;
-&#35;include&nbsp;&lt;cmath&gt;
+	<pre>
+	&#35;include&nbsp;&lt;iostream&gt;
+	&#35;include&nbsp;&lt;fstream&gt;
+	&#35;include&nbsp;&lt;vector&gt;
+	&#35;include&nbsp;&lt;algorithm&gt;
+	&#35;include&nbsp;&lt;cmath&gt;
 
-using&nbsp;namespace&nbsp;std&#59;
+	using&nbsp;namespace&nbsp;std&#59;
 
-struct&nbsp;Pair&nbsp;{&nbsp;int&nbsp;a,b&#59;&nbsp;}&#59;
+	struct&nbsp;Pair&nbsp;{&nbsp;int&nbsp;a,b&#59;&nbsp;}&#59;
 
-bool&nbsp;operator&nbsp;&lt;(Pair&nbsp;p,Pair&nbsp;q)&nbsp;{
-	return&nbsp;(p.a*p.a+p.b*p.b)&lt;(q.a*q.a+q.b*q.b)&#59;
-}
-
-class&nbsp;Image&nbsp;{
-public:
-	int&nbsp;w,h&#59;
-	int&nbsp;*img&#59;
-
-	Image(int&nbsp;ww,int&nbsp;hh,int&nbsp;initVal=0)&nbsp;:&nbsp;w(ww),h(hh)&nbsp;{
-		img=new&nbsp;int[w*h]&#59;
-		for(int&nbsp;i=0&#59;i&lt;w*h&#59;i++)&nbsp;img[i]=initVal&#59;
+	bool&nbsp;operator&nbsp;&lt;(Pair&nbsp;p,Pair&nbsp;q)&nbsp;{
+		return&nbsp;(p.a*p.a+p.b*p.b)&lt;(q.a*q.a+q.b*q.b)&#59;
 	}
 
-	void&nbsp;line(int&nbsp;color,int&nbsp;x1,int&nbsp;y1,int&nbsp;x2,int&nbsp;y2)&nbsp;{
-		double&nbsp;dx=x2-x1,dy=y2-y1,sx=dx&gt;0?1:-1,sy=dy&gt;0?1:-1&#59;
+	class&nbsp;Image&nbsp;{
+	public:
+		int&nbsp;w,h&#59;
+		int&nbsp;*img&#59;
 
-		if(dx==0.0&nbsp;&&&nbsp;dy==0.0)&nbsp;return&#59;
-
-		if(abs(dx)&gt;abs(dy))&nbsp;{
-			for(double&nbsp;m=dy/dx,y=y1,x=x1,i=0&#59;x&#33;=x2&#59;x+=sx,i++,y=y1+i*sx*m)&nbsp;pixel(x,y)=color&#59;
-		}&nbsp;else&nbsp;{
-			for(double&nbsp;m=dx/dy,x=x1,y=y1,i=0&#59;y&#33;=y2&#59;y+=sy,i++,x=x1+i*sy*m)&nbsp;pixel(x,y)=color&#59;
+		Image(int&nbsp;ww,int&nbsp;hh,int&nbsp;initVal=0)&nbsp;:&nbsp;w(ww),h(hh)&nbsp;{
+			img=new&nbsp;int[w*h]&#59;
+			for(int&nbsp;i=0&#59;i&lt;w*h&#59;i++)&nbsp;img[i]=initVal&#59;
 		}
+
+		void&nbsp;line(int&nbsp;color,int&nbsp;x1,int&nbsp;y1,int&nbsp;x2,int&nbsp;y2)&nbsp;{
+			double&nbsp;dx=x2-x1,dy=y2-y1,sx=dx&gt;0?1:-1,sy=dy&gt;0?1:-1&#59;
+
+			if(dx==0.0&nbsp;&&&nbsp;dy==0.0)&nbsp;return&#59;
+
+			if(abs(dx)&gt;abs(dy))&nbsp;{
+				for(double&nbsp;m=dy/dx,y=y1,x=x1,i=0&#59;x&#33;=x2&#59;x+=sx,i++,y=y1+i*sx*m)&nbsp;pixel(x,y)=color&#59;
+			}&nbsp;else&nbsp;{
+				for(double&nbsp;m=dx/dy,x=x1,y=y1,i=0&#59;y&#33;=y2&#59;y+=sy,i++,x=x1+i*sy*m)&nbsp;pixel(x,y)=color&#59;
+			}
+		}
+
+		int&&nbsp;pixel(int&nbsp;x,int&nbsp;y)&nbsp;{&nbsp;return&nbsp;img[(h-y-1)*w+x]&#59;&nbsp;}
+		int&&nbsp;operator()(int&nbsp;x,int&nbsp;y)&nbsp;{&nbsp;return&nbsp;pixel(x,y)&#59;&nbsp;}
+		int&&nbsp;operator()(int&nbsp;i)&nbsp;{&nbsp;return&nbsp;img[i]&#59;&nbsp;}
+
+		~Image()&nbsp;{&nbsp;delete&nbsp;img&#59;&nbsp;}
+	}&#59;
+
+	void&nbsp;drawPpm(int&nbsp;s,int&nbsp;n,vector&lt;Pair&gt;&&nbsp;pairs)&nbsp;{
+		int&nbsp;i,j,k,pad=s/20,ss=(s-2*pad)/(n-1)&#59;
+		int&nbsp;blankColor=255,lineColor=0,gridColor=200&#59;
+
+		cout&lt;&lt;"P2&nbsp;"&lt;&lt;s&lt;&lt;"&nbsp;"&lt;&lt;s&lt;&lt;"&nbsp;255"&lt;&lt;endl&#59;
+
+		Image&nbsp;img(s,s,blankColor)&#59;
+		
+		//&nbsp;grid&nbsp;drawing
+		for(i=0&#59;i&lt;n&#59;i++)&nbsp;{
+			img.line(gridColor,pad,pad+i*ss,pad+(n-1)*ss,pad+i*ss)&#59;
+			img.line(gridColor,pad+i*ss,pad,pad+i*ss,pad+(n-1)*ss)&#59;
+		}
+
+		//&nbsp;plot&nbsp;drawing
+		Pair&nbsp;p=pairs[0]&#59;
+		for(Pair&nbsp;q&nbsp;:&nbsp;pairs)&nbsp;{
+			img.line(lineColor,pad+(p.a-1)*ss,pad+(p.b-1)*ss,pad+(q.a-1)*ss,pad+(q.b-1)*ss)&#59;
+			p=q&#59;
+		}
+
+		//&nbsp;write&nbsp;to&nbsp;file
+		for(i=0&#59;i&lt;img.w*img.h&#59;i++)&nbsp;cout&lt;&lt;img(i)&lt;&lt;"&nbsp;"&#59;
 	}
 
-	int&&nbsp;pixel(int&nbsp;x,int&nbsp;y)&nbsp;{&nbsp;return&nbsp;img[(h-y-1)*w+x]&#59;&nbsp;}
-	int&&nbsp;operator()(int&nbsp;x,int&nbsp;y)&nbsp;{&nbsp;return&nbsp;pixel(x,y)&#59;&nbsp;}
-	int&&nbsp;operator()(int&nbsp;i)&nbsp;{&nbsp;return&nbsp;img[i]&#59;&nbsp;}
+	int&nbsp;main(int&nbsp;argc,char&nbsp;*argv[])&nbsp;{
+		if(argc&#33;=3)&nbsp;{
+			cout&lt;&lt;argv[0]&lt;&lt;"&nbsp;n&nbsp;s\n"&#59;
+		}
+		vector&lt;Pair&gt;&nbsp;pairs&#59;
+		int&nbsp;i,j,n=max(2,atoi(argv[1])),s=max(200,atoi(argv[2]))&#59;
 
-	~Image()&nbsp;{&nbsp;delete&nbsp;img&#59;&nbsp;}
-}&#59;
+		for(i=1&#59;i&lt;=n&#59;i++)&nbsp;{
+			for(j=i&#59;j&lt;=n&#59;j++)&nbsp;pairs.push_back((Pair){i,j})&#59;
+		}
 
-void&nbsp;drawPpm(int&nbsp;s,int&nbsp;n,vector&lt;Pair&gt;&&nbsp;pairs)&nbsp;{
-	int&nbsp;i,j,k,pad=s/20,ss=(s-2*pad)/(n-1)&#59;
-	int&nbsp;blankColor=255,lineColor=0,gridColor=200&#59;
+		sort(pairs.begin(),pairs.end())&#59;
 
-	cout&lt;&lt;"P2&nbsp;"&lt;&lt;s&lt;&lt;"&nbsp;"&lt;&lt;s&lt;&lt;"&nbsp;255"&lt;&lt;endl&#59;
 
-	Image&nbsp;img(s,s,blankColor)&#59;
-	
-	//&nbsp;grid&nbsp;drawing
-	for(i=0&#59;i&lt;n&#59;i++)&nbsp;{
-		img.line(gridColor,pad,pad+i*ss,pad+(n-1)*ss,pad+i*ss)&#59;
-		img.line(gridColor,pad+i*ss,pad,pad+i*ss,pad+(n-1)*ss)&#59;
+		//&nbsp;for(Pair&nbsp;p&nbsp;:&nbsp;pairs)&nbsp;cout&lt;&lt;"("&lt;&lt;p.a&lt;&lt;","&lt;&lt;p.b&lt;&lt;")"&lt;&lt;endl&#59;
+		
+		drawPpm(s,n,pairs)&#59;
+		return&nbsp;0&#59;
 	}
-
-	//&nbsp;plot&nbsp;drawing
-	Pair&nbsp;p=pairs[0]&#59;
-	for(Pair&nbsp;q&nbsp;:&nbsp;pairs)&nbsp;{
-		img.line(lineColor,pad+(p.a-1)*ss,pad+(p.b-1)*ss,pad+(q.a-1)*ss,pad+(q.b-1)*ss)&#59;
-		p=q&#59;
-	}
-
-	//&nbsp;write&nbsp;to&nbsp;file
-	for(i=0&#59;i&lt;img.w*img.h&#59;i++)&nbsp;cout&lt;&lt;img(i)&lt;&lt;"&nbsp;"&#59;
-}
-
-int&nbsp;main(int&nbsp;argc,char&nbsp;*argv[])&nbsp;{
-	if(argc&#33;=3)&nbsp;{
-		cout&lt;&lt;argv[0]&lt;&lt;"&nbsp;n&nbsp;s\n"&#59;
-	}
-	vector&lt;Pair&gt;&nbsp;pairs&#59;
-	int&nbsp;i,j,n=max(2,atoi(argv[1])),s=max(200,atoi(argv[2]))&#59;
-
-	for(i=1&#59;i&lt;=n&#59;i++)&nbsp;{
-		for(j=i&#59;j&lt;=n&#59;j++)&nbsp;pairs.push_back((Pair){i,j})&#59;
-	}
-
-	sort(pairs.begin(),pairs.end())&#59;
-
-
-	//&nbsp;for(Pair&nbsp;p&nbsp;:&nbsp;pairs)&nbsp;cout&lt;&lt;"("&lt;&lt;p.a&lt;&lt;","&lt;&lt;p.b&lt;&lt;")"&lt;&lt;endl&#59;
-	
-	drawPpm(s,n,pairs)&#59;
-	return&nbsp;0&#59;
-}</pre>
-</p>
+	</pre>
 
 <div>
-	<p>
-		<hr>
-		<a href="/">Up</a> | <a href="mailto:watchingwaterfalls@gmail.com">Contact</a>
-	</p>
+	<hr>
+	<a href="/">Up</a> | <a href="mailto:watchingwaterfalls@gmail.com">Contact</a>
 </div>
 
 </body>
