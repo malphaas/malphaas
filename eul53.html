@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Solution to Project Euler problem 53</title>
+</head>
+
+<body>
+	<div>
+		<a href="/">Home</a>
+		<hr>
+	</div>
+
+	<h1>Solution to Project Euler problem 53</h1>
+
+	<p>
+		My solution for Project Euler problem 53, it relies on the monotonicity and symmetry of the combinatorial function.
+	</p>
+
+<pre>
+&#35;include&nbsp;&lt;stdio.h&gt;
+
+int&nbsp;main()&nbsp;{
+	int&nbsp;i,j,c,s=0&#59;
+
+	for(i=1&#59;i&lt;=100&#59;i++)&nbsp;{
+		for(j=0,c=1&#59;j&lt;=i&#59;c=(c*(i-j)/(j+1)),j++)&nbsp;{
+			if(c&gt;1e6)&nbsp;{&nbsp;s+=i+1-2*j&#59;&nbsp;break&#59;&nbsp;&nbsp;}
+		}
+	}
+	
+	printf("%d\n",s)&#59;
+	return&nbsp;0&#59;
+}
+</pre>
+
+	<p>
+		C(n,r+1)/C(n,r) = (n-r)/(r+1) obviously. Also is obvious that it is symmetric about r=floor(n/2) (odd symmetry for even n and even symmetry for odd n). To see how it is monotonic (within symmetry) it is easy to observe that the ratio would always be greater than 1. [ n-r >= r+1 leads to (n-1) >= 2r which is always true for 0 <= r <= floor(n/2) ]. 
+	</p>
+
+	<p>
+		From this, we can simply skip further computations for a given n whenever we have reached a value greater than the required value (1e6 in this case), it is easy to see the total number of values for an n greater than equal to the value would be n+1-2*r in both the odd and even cases of n for the r that first caused it to cross our threshold value.
+	</p>
+
+	<p>
+		Why not just directly compute all the combinatorial values upto r=floor(n/2)? Because it would quickly lead to numbers greater than can be fitted into a typical integer register on most machines and thus would require costly biginteger or prime factorization computations.
+	</p> 
+
+<div>
+	<hr>
+	<a href="/">Up</a> | <a href="mailto:watchingwaterfalls@gmail.com">Contact</a>
+</div>
+
+</body>
+
+</html>
