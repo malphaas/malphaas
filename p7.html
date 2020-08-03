@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Sierpinski triangle</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+	<div>
+		<a href="/">Home</a>
+		<hr>
+	</div>
+
+	<h1>Sierpinski triangle</h1>
+
+	<p>
+		A rather crude and unoptimized program for generation of the Sierpinski triangle with a given edge size of the largest triangle and number of iterations. 
+	</p>
+
+	<p>
+		First some example images:
+	</p>
+
+	<h2>n=1</h2>
+	<p><img src="sier/sier1.png"></p>
+
+	<h2>n=2</h2>
+	<p><img src="sier/sier2.png"></p>
+
+	<h2>n=3</h2>
+	<p><img src="sier/sier3.png"></p>
+
+	<h2>n=4</h2>
+	<p><img src="sier/sier4.png"></p>
+
+	<h2>n=5</h2>
+	<p><img src="sier/sier5.png"></p>
+
+	<h2>n=6</h2>
+	<p><img src="sier/sier6.png"></p>
+
+	<h2>n=7</h2>
+	<p><img src="sier/sier7.png"></p>
+
+	<h2>n=8</h2>
+	<p><img src="sier/sier8.png"></p>
+
+	<h2>The program</h2>
+
+	<p>
+		It works by making a new triangle from the midpoints of the current triangle and recursing on the three newly formed subtriangles.
+	</p>
+
+	<pre>
+/*&nbsp;Sierpinski&nbsp;curve&nbsp;*/
+&#35;include&nbsp;&lt;stdio.h&gt;
+&#35;include&nbsp;&lt;stdlib.h&gt;
+&#35;include&nbsp;&lt;string.h&gt;
+&#35;include&nbsp;&lt;math.h&gt;
+
+typedef&nbsp;struct&nbsp;{&nbsp;double&nbsp;x,y&#59;&nbsp;}Pt&#59;
+
+void&nbsp;line(int*,int,int,int,int,int,int)&#59;
+
+void&nbsp;init_sier(int&nbsp;a,int&nbsp;p,int&nbsp;**buf,int&nbsp;*ww,int&nbsp;*hh,Pt&nbsp;*v)&nbsp;{
+	int&nbsp;w=a+p+4,h=a*sqrt(3)*0.5+2*p+4,s=(int)(w*h)&#59;
+	*ww=(int)w&#59;&nbsp;*hh=(int)h&#59;
+	*buf=malloc(sizeof(int)*s)&#59;
+	memset(*buf,0,sizeof(int)*s)&#59;
+
+	v[0]=(Pt){p&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;p+((double)a)*sqrt(3)*0.5}&#59;
+	v[1]=(Pt){p+a&nbsp;&nbsp;&nbsp;,&nbsp;p+a*sqrt(3)*0.5}&#59;
+	v[2]=(Pt){p+a/2&nbsp;,&nbsp;p}&#59;
+}
+
+void&nbsp;line(int&nbsp;*buf,int&nbsp;w,int&nbsp;h,int&nbsp;x1,int&nbsp;y1,int&nbsp;x2,int&nbsp;y2)&nbsp;{
+	double&nbsp;dx=x2-x1,dy=y2-y1,x=x1,y=y1,m&#59;
+
+	if(x1==x2&nbsp;&amp;&amp;&nbsp;y1==y2)&nbsp;{&nbsp;buf[y1*w+x1]=1&#59;&nbsp;return&#59;&nbsp;}
+
+	if(fabs(dy)&lt;fabs(dx))&nbsp;{
+		if(y1==y2)&nbsp;{
+			if(x1&gt;x2)&nbsp;{&nbsp;x=x2&#59;&nbsp;x2=x1&#59;&nbsp;}
+			for(&#59;x&lt;=x2&#59;x++)&nbsp;buf[(int)y*w+(int)x]=1&#59;
+			return&#59;
+		}
+
+		if(dx&gt;0)&nbsp;{
+			for(m=dy/dx,x=x1,y=y1&#59;(y1&lt;y2&nbsp;?&nbsp;y&lt;=y2:y&gt;=y2)&nbsp;||&nbsp;x&lt;=x2&nbsp;&#59;x++,y=y1+m*(x-x1))&nbsp;buf[(int)y*w+(int)x]=1&#59;
+		}&nbsp;else&nbsp;{
+			for(m=dy/dx,x=x2,y=y2&#59;(y1&lt;y2&nbsp;?&nbsp;y&gt;=y1:y&lt;=y1)&nbsp;||&nbsp;x&lt;=x1&nbsp;&#59;x++,y=y1+m*(x-x1))&nbsp;buf[(int)y*w+(int)x]=1&#59;
+		}
+	}&nbsp;else&nbsp;{
+		if(x1==x2)&nbsp;{
+			if(y1&gt;y2)&nbsp;{&nbsp;y=y2&#59;&nbsp;y2=y1&#59;&nbsp;}
+			for(&#59;y&lt;=y2&#59;y++)&nbsp;buf[(int)y*w+(int)x]=1&#59;
+		}
+		if(dy&gt;0)&nbsp;{
+			for(m=dx/dy,x=x1,y=y1&#59;(x1&lt;x2&nbsp;?&nbsp;x&lt;=x2:x&gt;=x2)&nbsp;||&nbsp;y&lt;=y2&nbsp;&#59;y++,x=x1+m*(y-y1))&nbsp;buf[(int)y*w+(int)x]=1&#59;
+		}&nbsp;else&nbsp;{
+			for(m=dx/dy,x=x2,y=y2&#59;(x1&lt;x2&nbsp;?&nbsp;x&gt;=x1:x&lt;=x1)&nbsp;||&nbsp;y&lt;=y1&nbsp;&#59;y++,x=x1+m*(y-y1))&nbsp;buf[(int)y*w+(int)x]=1&#59;
+		}
+	}
+}
+
+/*&nbsp;recursively&nbsp;draw&nbsp;the&nbsp;curve&nbsp;*/
+void&nbsp;sier(int&nbsp;*buf,int&nbsp;w,int&nbsp;h,Pt&nbsp;*v,int&nbsp;d)&nbsp;{
+	Pt&nbsp;vv[3],vv1[3],vv2[3],vv3[3]&#59;
+
+	if(d==0)&nbsp;return&#59;
+
+	/*&nbsp;draw&nbsp;the&nbsp;edges&nbsp;*/
+	line(buf,w,h,v[0].x,v[0].y,v[1].x,v[1].y)&#59;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line(buf,w,h,v[1].x,v[1].y,v[2].x,v[2].y)&#59;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;line(buf,w,h,v[2].x,v[2].y,v[0].x,v[0].y)&#59;
+
+	/*&nbsp;make&nbsp;a&nbsp;new&nbsp;triangle&nbsp;from&nbsp;midpoints&nbsp;of&nbsp;edges&nbsp;*/
+	if(d&gt;0)&nbsp;{
+		vv[0]=(Pt){(v[0].x+v[1].x)/2,(v[0].y+v[1].y)/2}&#59;
+		vv[1]=(Pt){(v[1].x+v[2].x)/2,(v[1].y+v[2].y)/2}&#59;
+		vv[2]=(Pt){(v[2].x+v[0].x)/2,(v[2].y+v[0].y)/2}&#59;
+
+		vv1[0]=v[0]&#59;&nbsp;&nbsp;vv1[1]=vv[0]&#59;&nbsp;vv1[2]=vv[2]&#59;
+		vv2[0]=vv[0]&#59;&nbsp;vv2[1]=v[1]&#59;&nbsp;&nbsp;vv2[2]=vv[1]&#59;
+		vv3[0]=vv[1]&#59;&nbsp;vv3[1]=v[2]&#59;&nbsp;&nbsp;vv3[2]=vv[2]&#59;
+
+		sier(buf,w,h,vv1,d-1)&#59;
+		sier(buf,w,h,vv2,d-1)&#59;
+		sier(buf,w,h,vv3,d-1)&#59;
+	}
+}
+
+int&nbsp;main(int&nbsp;argc,char&nbsp;*argv[])&nbsp;{
+	int&nbsp;a,p=10,w,h,*buf,d,i&#59;
+	Pt&nbsp;v[3]&#59;
+
+	if(argc&#33;=3)&nbsp;{
+		fprintf(stderr,"%s&nbsp;edge&nbsp;iterations\n",argv[0])&#59;
+		return&nbsp;1&#59;
+	}
+
+	if((a=atoi(argv[1]))&lt;=0)&nbsp;{
+		fprintf(stderr,"%s&nbsp;edge&nbsp;iterations\n",argv[0])&#59;
+		return&nbsp;2&#59;
+	}
+
+	if((d=atoi(argv[2]))&lt;=0)&nbsp;{
+		fprintf(stderr,"%s&nbsp;edge&nbsp;iterations\n",argv[0])&#59;
+		return&nbsp;3&#59;
+	}
+
+	/*&nbsp;fprintf(stderr,"a=%d,d=%d\n",a,d)&#59;&nbsp;*/
+
+	init_sier(a,p,&amp;buf,&amp;w,&amp;h,v)&#59;
+	sier(buf,w,h,v,d)&#59;
+
+	printf("P1&nbsp;%d&nbsp;%d\n",w,h)&#59;
+
+	for(i=0&#59;i&lt;w*h&#59;i++)&nbsp;printf("%d&nbsp;",buf[i])&#59;
+
+	printf("\n")&#59;
+
+	free(buf)&#59;
+	return&nbsp;0&#59;
+}
+</pre>
+	
+	<div>
+		<hr>
+		<a href="/">Up</a> | <a href="mailto:watchingwaterfalls@gmail.com">Contact</a>
+	</div>
+
+</body>
+
+</html>
