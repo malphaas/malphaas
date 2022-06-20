@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>A simple dragon curve sequence program</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+	<div>
+		<a href="/">Home</a>
+		<hr>
+	</div>
+
+	<h1>A simple dragon curve sequence program</h1>
+
+	<p>
+		The dragon curve is the curve you get when you repeatedly fold a strip of paper on itself always along the same direction with respect to the closed edge, then expand it so that all the folds are
+		right angles. If we denote a right turn by 1 and a left turn by 0 the first few iterations of the sequence would be as follows (the sequence starts at one fold ie two edges):
+	</p>
+
+	<pre>
+		1
+		1<b>1</b>0
+		110<b>1</b>100
+		1101100<b>1</b>1100100
+		110110011100100<b>1</b>110110001100100
+	</pre>
+
+	<p>
+		...and so on. It can be seen that each iteration is simply the complemented mirror image of the previous iteration appended to itself with a 1 in between. Let our current index be i and let us assume
+		it is not one of the nodal points with '1' value described. The situation is like this:
+	</p>
+
+	<p>
+		(0,1,2,...,2<sup>k</sup>-2)(2<sup>k</sup>-1)(2<sup>k</sup>,...,i,...,2<sup>k+1</sup>-2)
+	</p>
+
+	<p>
+		The position of i in the second mirror image half is (i-2<sup>k</sup>), thus its reflection in the first half would be at (2<sup>k</sup>-2) - (i-2<sup>k</sup>) = 2*(2<sup>k</sup>-1)-i where 2<sup>k-1</sup> is 
+		of course the index of the nodal point. In the code below the running nodal index is denoted by the variable tk and n is the number of bits to generate.
+	</p>
+	
+	<pre>
+&#35;include&nbsp;&lt;stdio.h&gt;
+
+int&nbsp;main()&nbsp;{
+	int&nbsp;i,tk=0,n=400&#59;
+	int&nbsp;d[1000]&#59;
+	d[0]=1&#59;
+
+	printf("%d",d[0])&#59;
+	for(i=1&#59;i&lt;n&#59;i++)&nbsp;{
+		if(i==tk*2+1)&nbsp;{&nbsp;tk=i&#59;&nbsp;d[i]=1&#59;&nbsp;}
+		else&nbsp;d[i]=&#33;d[2*tk-i]&#59;
+		printf("%d",d[i])&#59;
+	}
+
+	printf("\n")&#59;
+	return&nbsp;0&#59;
+}
+</pre>
+		
+	<p>
+		Here's the first 400 bits of the dragon curve:
+	</p>
+	
+<pre>
+11011001110010011101100011001001110110011100100011011000110010011101100111001001
+11011000110010001101100111001000110110001100100111011001110010011101100011001001
+11011001110010001101100011001000110110011100100111011000110010001101100111001000
+11011000110010011101100111001001110110001100100111011001110010001101100011001001
+11011001110010011101100011001000110110011100100011011000110010001101100111001001
+</pre>														
+	
+	<div>
+		<hr>
+		<a href="/">Up</a> | <a href="mailto:watchingwaterfalls@gmail.com">Contact</a>
+	</div>
+
+</body>
+
+</html>
