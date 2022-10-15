@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Obtaining a coordinate system on a plane in space</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style> .eq { font-family:"Serif"; } </style>
+</head>
+
+<body>
+	<div>
+		<a href="/">Home</a>
+		<hr>
+	</div>
+
+	<h1>Obtaining a coordinate system on a plane in space</h1>
+
+	<p>
+		I have sometimes need of a coordinate system lying on a plane from a given point (for example, to represent a planar circle in space with a given center and axis). The normal vector of the plane is 
+		assumed to be the Z-axis and we are to find vectors corresponding to the X and Y axis. We are not concerned with the exact orientation of the X-Y axis, as they indeed can lie anywhere on the circle
+		normal to the Z-axis, but if it really is a concern we may perform a planar rotation on it to align it to our needed directions.
+	</p>
+
+	<p>
+		Let us assume the Z-axis is along the unit vector <span class="eq">(a,b,c)</span>. We aim to find another unit vector, say <span class="eq">(p,q,r)</span> orthogonal to it. Our equations then are:
+	</p>
+
+	<p class="eq">
+		a<sup>2</sup> + b<sup>2</sup> + c<sup>2</sup> = 1 <br />
+		ap + bq + cr = 0<br />
+		p<sup>2</sup> + q<sup>2</sup> + r<sup>2</sup> = 1<br />
+	</p>
+
+	<p>
+		From the second equation expressing r in terms of p and q,
+	</p>
+
+	<p class="eq">
+		r = -(ap + bq)/c
+	</p>
+
+	<p>
+		Then substituting this into the equation for the norm,
+	</p>
+
+	<p class="eq">
+		p<sup>2</sup> + q<sup>2</sup> + (ap + bq)<sup>2</sup>/c<sup>2</sup> = 1
+	</p>
+
+	<p>
+		We have now a single equation and two variables thus any one may be assumed to be a free parameter. Or from the geometric situation also we may clearly see how the solution is an infinite set of
+		unit vectors arranged in a circle around the Z axis, and given it is a circle we have again, one free parameter. For concreteness assume p to be the free variable, and further, for ease of calculation
+		set it to 0. Then we have,
+	</p>
+
+	<p class="eq">
+		q<sup>2</sup> + b<sup>2</sup>q<sup>2</sup>/c<sup>2</sup> = 1, or<br />
+		(1 + b<sup>2</sup>/c<sup>2</sup>)q<sup>2</sup> = 1, or<br />
+		q<sup>2</sup> = c<sup>2</sup>/(b<sup>2</sup> + c<sup>2</sup>), or<br />
+		q = +- c/sqrt(1 - a<sup>2</sup>), or<br />
+		q = c/sqrt(1 - a<sup>2</sup>) (supposing for concreteness)
+	</p>
+
+	<p>
+		Substituting this value back to the orthogonality equation,
+	</p>
+
+	<p class="eq">
+		bq + rc = 0, or<br />
+		r = -bq/c, or<br />
+		r = -b/sqrt(1 - a<sup>2</sup>)
+	</p>
+
+	<p>
+		Thus the vector corresponding to our X axis is <span class="eq">(0, c/sqrt(1 - a<sup>2</sup>), -b/sqrt(1 - a<sup>2</sup>))</span>. We easily obtain the Y axis vector by performing cross product of Z and X 
+		vectors obtaining <span class="eq">(-(1 - a<sup>2</sup>)/sqrt(1 - a<sup>2</sup>), ab/sqrt(1 - a<sup>2</sup>), ca/sqrt(1 - a<sup>2</sup>))</span>. You may easily verify for yourself that each of these has 
+		norm 1 and are mutually orthogonal. We may therefore state the X, Y and Z vectors in one place now as:
+	</p>
+
+	<style>
+	td { padding:0.5em; padding-left:1em; padding-right:1em; }
+	table table { width:100%; }
+	table table td { padding:0; }
+	table table tr:first-of-type td { border-bottom:1px solid black; }
+	</style>
+
+	<table style="text-align:center; border-left:1px solid black; border-right:1px solid black;" class="eq">
+	<tbody>
+	<tr>
+		<td>0</td>
+		<td>
+			<table>
+			<tbody>
+				<tr><td>c</td></tr>
+				<tr><td>&#8730;(1 - a<sup>2</sup>)</td></tr>
+			</tbody>
+			</table>
+		</td>
+		<td>
+			<table>
+			<tbody>
+				<tr><td>-b<td></tr>
+				<tr><td>&#8730;(1 - a<sup>2</sup>)</td></tr>
+			</tbody>
+			</table>
+		</td>
+	</tr>
+
+	<tr>
+		<td>
+			<table>
+			<tbody>
+				<tr><td>-(1 - a<sup>2</sup>)</td></tr>
+				<tr><td>&#8730;(1 - a<sup>2</sup>)</td></tr>
+			</tbody>
+			</table>
+		</td>
+		<td>
+			<table>
+			<tbody>
+				<tr><td>ab</td></tr>
+				<tr><td>&#8730;(1 - a<sup>2</sup>)</td></tr>
+			</tbody>
+			</table>
+		</td>
+		<td>
+			<table>
+			<tbody>
+				<tr><td>ca</td></tr>
+				<tr><td>&#8730;(1 - a<sup>2</sup>)</td></tr>
+			</tbody>
+			</table>
+		</td>
+	</tr>
+
+	<tr>
+		<td>a</td>
+		<td>b</td>
+		<td>c</td>
+	</tr>
+	</tbody>
+	</table>
+
+	<p>
+		This is merely one possible formulation and as stated above you can obtain any of an infinite set of vectors by choosing a different variable or assignment for the parameter. One natural choice might be
+		to try q = 0 or r = 0 instead which should lead to simple permutations of this matrix.
+	</p>
+
+	<p>
+		These are free vectors denoting the directions of the coordinate axes, before actually using them you need to of course translate them to the point of interest on your plane which will be the origin of
+		your system.
+	</p>
+	
+	<div>
+		<hr>
+		<a href="/">Up</a> | <a href="mailto:watchingwaterfalls@gmail.com">Contact</a>
+	</div>
+
+</body>
+
+</html>
