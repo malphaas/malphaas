@@ -1,0 +1,58 @@
+#!/bin/bash
+
+n=$(cat PAGES)
+n=$(( n + 1 ))
+
+title="$@"
+
+echo "$title"
+
+echo "$n"
+
+fn="p${n}.html"
+
+>"$fn"
+
+cat <<EOF >> "$fn"
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+EOF
+
+echo "<title>${title}</title>" >> "$fn"
+
+cat <<EOF >> "$fn"
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+	<div>
+		<a href="/">Home</a>
+		<hr>
+	</div>
+EOF
+
+echo "	<h1>${title}</h1>" >> "$fn"
+
+cat <<EOF >> "$fn"
+
+	<p>
+		
+	</p>
+
+<div>
+	<hr>
+	<a href="/">Up</a> | <a href="mailto:watchingwaterfalls@gmail.com">Contact</a>
+</div>
+
+</body>
+
+</html>
+EOF
+
+echo "$n" > PAGES
+./genindex > index.html
+
+exec nano +18,9 "$fn" 

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cat TOP
+
+for n in $(seq $(cat PAGES) -1 1) ; do
+	title=$(cat "p${n}.html"  | grep '<title>' | sed 's/<title>//g' | sed 's/<\/title>//g' )
+#	echo X"$title"X
+	echo -ne '\t\t'
+	echo "<li><a href=\"p${n}.html\">${title}</a></li>"
+done
+
+cat BOTTOM
