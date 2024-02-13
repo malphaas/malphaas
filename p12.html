@@ -3,7 +3,7 @@
 
 <head>
 <meta charset="UTF-8">
-<title>fart up</title>
+<title>Counting set bits in integers upto a number</title>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
@@ -12,11 +12,61 @@
 		<a href="/">Home</a>
 		<hr>
 	</div>
-	<h1>fart up</h1>
+	<h1>Counting set bits in integers upto a number</h1>
 
 	<p>
-		farted up fartitty farts
+		If we write down the column of binary representations from 0 to 2<sup>N</sup>-1 we see a pattern emerge:
 	</p>
+
+<pre>
+000
+001
+010
+011
+100
+101
+110
+111
+</pre>
+	<p>
+		Let us assume we are speaking of the kth least significant bit position (k=0 for lsb, k=1 for 2's position, k=2 for
+		4's position, and so on). We observe the digits form alternative blocks of size 2**k that flip between 0 and 1.
+		For example the first 4 bits in the 3rd bit (k=2) are 0, then next 4 bits are 1 if we read from top to bottom. 
+	</p>
+
+	<p>
+		Let our goal be to find the number of one bits in the binary representations within all integers in [0,n) = [0,n-1].
+		Let us consider the kth bit position. So the block size is m. In order to find the index of the block our number
+		belongs to, we compute s=floor(n/2**k), and the index of the number within the block is t=n%(2**k).
+		The number of 1-blocks upto and before the current block is s/2 since every alternate block is all 1s.
+		So the number of bits gathered till now is (s/2)*2**k. Next we have to compute the remaining set bits inside the last
+		block. The index of our number is t, which means we have a total of (t+1) numbers under consideration
+		that fall inside the last block.
+		However it depends on index of block, even indices are all zero, odd indices are all one. So we add 
+		(s%2)*(t+1), the modulus condition takes care of block parity.
+	</p>
+
+	<p>
+		Summing up, and traversing the powers from LSB to MSB:
+	</p>
+
+<pre>
+int f(int n) {
+	int p=1,c=0,m;
+
+	while(p<=n) {
+		m=n/p;
+		c+=(m/2)*p + (m%2)*(n%p+1);
+		p*=2;
+	}
+
+	return c;
+}
+</pre>
+
+<p>
+	This is obviously of O(log n) time complexity.
+</p>
 
 <div>
 	<hr>
