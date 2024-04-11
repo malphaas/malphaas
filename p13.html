@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Circumradius expressed in terms of side lengths of triangle</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+	<div>
+		<a href="/">Home</a>
+		<hr>
+	</div>
+	<h1>Circumradius expressed in terms of side lengths of triangle</h1>
+
+	<p>
+		Consider the situation below:
+	</p>
+
+	<p>
+		<img src="circumcirc.png" />
+	</p>
+
+	<p>
+		Here point 'O' is the circumcenter. By a property of the circle &angle;BOC = 2&angle;BAC = 2&angle;A (per the usual notation of triangle angles). Since OB=OC=R, the triangle BOC is actually isosceles. Considering that triangle,
+	</p>
+
+	<p>
+		R = (a/2) / sin A <br/>
+		  = (a/2) / &Sqrt; ( 1 - cos^2 A )
+	</p>
+
+	<p>
+		Applying cosine law,
+	</p>
+
+	<p>
+		R </br>
+		= (a/2) / &Sqrt; ( 1 - ((b^2 + c^2 - a^2)/2bc)^2 ) ) <br/>
+		= (a/2 * 2bc) / &Sqrt; ( (2bc)^2 - (b^2 + c^2 = a^2)^2 ) <br/>
+		= abc / &Sqrt; ( [2bc + b^2 + c^2 - a^2] [2bc - b^2 - c^2 + a^2] ) <br/>
+	    = abc / &Sqrt; ( [(b+c)^2 - a^2 ] [a^2 - (b-c)^2 ] ) <br/>
+	    = abc / &Sqrt; ( (b + c - a) (b + c + a) (a - b + c) (a + b - c) ) <br/>
+	    = abc / &Sqrt; ( (a + b + c) (-a + b + c) (a - b + c) (a + b -c) ) <br/>
+	    = abc / (2 &Sqrt;(s (s - a) (s - b) (s - c) ) <br/>
+	    = abc / (2 * Area ) </br>
+	</p>
+
+	<p>
+		Where s = (a+b+c)/2 as usual.
+	</p>
+</p>
+
+<div>
+	<hr>
+	<a href="/">Up</a> | <a href="mailto:watchingwaterfalls@gmail.com">Contact</a>
+</div>
+
+</body>
+
+</html>
