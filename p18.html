@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>An argument for how schoolbook or longhand square root algorithm works</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+	<div>
+		<a href="/">Home</a>
+		<hr>
+	</div>
+	<h1>An argument for how schoolbook or longhand square root algorithm works</h1>
+
+	<p>
+		I am not sure I can call it a proper proof or derivation, so the less ambitious term argument shall have to do. I can suppose we are all familiar with the algorithm. I shall produce a worked example nonetheless.
+	</p>
+
+	<pre>
+        3 1 6 2 2   
+       +---------------
+     3 |10 00 00 00 00          
+         9
+       +-----
+    61 | 100
+          61
+       +-------
+   626 |  3900
+          3756
+       +---------
+  6322 |   14400
+           12644
+       +-----------
+ 63242 |    175600
+            126484
+            ------
+             49116
+       
+	</pre>
+
+	<p>
+		There might be slight variations in layout but the algorithm is the same. The number whose square root is to be found is written as the top dividend. It is grouped into two digit groups, padding by an extra 0 at the left if necessary (or at the right for
+		the portion after the decimal point. However I shall confine myself to a presentation for integer portion only, the arguments for the decimal fraction portion are symmetrical except using negative powers of 10.). For the leftmost (highest place value)
+		group, we compute the floor of its square root ie the largest square root less than or equal to it. Since this is a two digit quantity naturally the square root values will always range from [0,9]. This is our first divisor D1, and also the first
+		output digit d1. In our example D1 = d1 = 3.
+	</p>
+
+	<p>
+		Next we add the last digit of the divisor to itself, and then pull down the next two digits to the remainder to form the next dividend. Then we tentatively try appending the digits from 0 to 9 at the end of the new divisor and then multiply the resulting
+		number by the same digit itself, and see the largest such value that is less than the dividend. Ie we try the values (D1*10 + 0)*0 , (D1*10 + 1)*1, (D1*10 + 2)*2,.... (D1*10 + 9)*9 until we find the largest value less than the divisor. In this case
+		D2 = 61 and this last digit newly appended is also the next output digit d2. Thus d2 = 1. The process repeats until we obtain the final remainder. As noted we are only working with integer square roots, in fact we may drop decimal fractions and continue
+		likewise indefinitely if the remainder is non-zero ie number isn't a perfect square.
+	</p>
+
+	<p>
+		Thus with our notation in place, D1 = 3, D2 = 61, D3 = 626, D4 = 6322, D5=63242, and d1 = 3, d2 = 1, d3 = 6, d4 = 2, d5 = 2. We denote the number itself whose square root is required as 'a'.
+	</p>
+
+	<p>
+		Now, the square root computed is d1d2d3.... in digit format. Assume a has an even number of digits 2*m. (If not as noted above we may simply prepend a 0). Then the square root will have m digits.
+		The value of the square root is,
+	</p>
+
+	<pre>
+(10^m d1 + 10^(m-1) d2 + .... + dm) ^ 2 <= a
+	</pre>
+
+	<p>
+		Where this is the largest integer whose square is <= a.
+	</p>
+
+	<p>
+		Expanding,
+	</p>
+
+	<pre>
+10^2m d1^2 + 10^2(m-1) d2^2 + ... + dm^2 + (cross terms)
+	</pre>
+
+	<p>
+		From this expansion we immediately collect terms that only contain d1, which is, simply the d1^2 term, ie, 10^2m d1^2 = 10^2m d1 ( d1 ) = 10^2m d1 ( D1 ) . D1 = d1.
+	</p>
+	
+	<p>
+		Now take terms remaining that have only d1 and d2 in them, namely the d1d2 and d2^2 terms,
+	</p>
+
+	<pre>
+  2 * 10^m d1 * 10^(m-1) d2 + 10^(2m-2) d2^2
+= 10^(2m-2) d2 (20 d1 + d2)
+= 10^(2(m-2+1)) d2 [ 10(D1 + d1 ) + d2 ]
+= 10^(2(m-2+1)) d2 D2
+	</pre>
+
+	<p>
+		This is all the terms with common the next power of 100 in the square (or the next power of 10, ie digit in the square root); and we are left with a curious structure inside. Outside is the second digit d2, inside is D1+d1 ie the old divisor + its last
+		digit, then its multiplied by 10 and d2 is added, ie the next division step where we append d2 to this divisor and itself multiply this by d2. Likewise you may observe that the next such term is 10^(2(m-3+1)) d3 [ 200 d1 + 20 d2 + d3 ] = 
+		10^(2(m-3+1)) d3 [ 10 (D2 + d2) + d3 ] = 10^(2(m-3+1)) d3 D3 by which let us be bold as to assume the general form of the D_k terms.
+	</p>
+
+	<p>
+		Let us consider the kth such division step. We must again gather all terms containing only (d1,d2,....,dk). <em>However,</em> since we have already dealt with all terms containing only (d1), and all terms containing only (d1,d2),..... all terms
+		containing only (d1,d2,...d_k-1), we are only left with those terms that are product of d_k with d_i where 1&lt;=i&lt;=k:
+	</p>
+<pre>
+  sum(1&lt;=i&lt;=k) 2 * 10^(m-i+1) 10^(m-k+1) di dk
+</pre>
+
+	<p>
+		Taking common factor and separating out the dk^2 term,
+	</p>
+
+<pre>
+= 10^2(m-k+1) dk [ sum(1&lt;=i&lt;k) [ 2 * 10^(k-i) di ] + dk]
+= 10^2(m-k+1) dk [ ( 2 * 10^(k-1) d1 + 2 * 10^(k-2) d2 + ... + 2 * 10^1 d_k-1 ) + dk ]
+</pre>
+
+	<p>
+		We can clearly see the D_k-1 term inside now per its assumed general form.
+	</p>
+
+<pre>
+= 10^2(m-k+1) dk [ 10 ( D_k-1 + d_k-1 ) + dk ]
+</pre>
+
+	<p>
+		Which follows the assumed principle of forming D_k from D_k-1, completing the induction. Thus the final form of the square is 10^m D1 d1 + 10^2(m-1) D2 d2 + 10^2(m-2) D3 d3 .... + Dm dm + remainder. 
+		The recursive process seen in this induction of obtaining D_k from D_k-1
+		shows the reasoning behind the rule of adding the last digit of divisor to itself then tentatively
+		appending next digit in long division.
+	</p>
+
+<div>
+	<hr>
+	<a href="/">Up</a> | <a href="mailto:watchingwaterfalls@gmail.com">Contact</a>
+</div>
+
+</body>
+
+</html>
