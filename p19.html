@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>A solution of the power sum system of order 3</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+	<div>
+		<a href="/">Home</a>
+		<hr>
+	</div>
+	<h1>A solution of the power sum system of order 3</h1>
+
+	<p>
+		Consider the system of equations,
+	</p>
+
+	<p>
+		x + y + z = a ...(1) <br />
+		x<sup>2</sup> + y<sup>2</sup> + z<sup>2</sup> = b ...(2)<br />
+		x<sup>3</sup> + y<sup>3</sup> + z<sup>3</sup> = c ...(3)<br />
+	</p>
+
+	<p>
+		Or more succintly, &Sigma;x = a, &Sigma;x<sup>2</sup> = b, &Sigma;x<sup>3</sup> = c.
+	</p>
+
+	<p>
+		Squaring the first and subtracting the second, a<sup>2</sup> - b = 2 &Sigma;xy or &Sigma;xy = (a<sup>2</sup> - b) / 2. Using an identity,
+	</p>
+
+	<p>
+		&Sigma;x ( &Sigma;x<sup>2</sup> - &Sigma;xy) = &Sigma;x<sup>3</sup> - 3xyz <br />
+		=> a ( b - (a<sup>2</sup> - b)/2 ) = c - 3xyz <br />
+		=> xyz = (a<sup>3</sup> - 3ab + 2c)/ 6xyz <br />
+		=> z = (a<sup>3</sup> - 3ab + 2c)/ 6xy <br />
+	</p>
+
+	<p>
+		Setting &lambda; = x+y and &mu; = 2xy, and using the fact z = a - (x+y) from (1),
+	</p>
+
+	<p>
+		 (a<sup>3</sup> - 3ab + 2c)/ 6xy = a - (x+y) <br />
+		 => 3(a - &lambda;) &mu; = a<sup>3</sup> - 3ab + 2c ...(4)<br />
+	</p>
+
+	<p>
+		Again, considering (2),
+	</p>
+
+	<p>
+		x<sup>2</sup> + y<sup>2</sup> + z<sup>2</sup> = b <br />
+		=> (x+y)<sup>2</sup> - 2xy + [a - (x+y)]<sup>2</sup> = b <br />
+		=> &lambda;<sup>2</sup> - &mu; + [a - &lambda;]<sup>2</sup> = b <br />
+		=> &mu; = 2&lambda;<sup>2</sup> - 2a&lambda; + a<sup>2</sup> - b ...(5) </br>
+	</p>
+
+	<p>
+		Substituting the value of &mu; from (5) into (4) we obtain a cubic equation in lambda,
+	</p>
+
+	<p>
+		3(a - &lambda;) ( 2&lambda;<sup>2</sup> - 2a&lambda; + a<sup>2</sup> - b) = a<sup>3</sup> - 3ab + 2c
+	</p>
+
+	<p>
+		Solving this equation then using the values of &lambda; and &mu; found from (5) to solve the system &lambda; = x + y, &mu; = 2xy for x and y,  z naturally follows from z = a - (x+y).
+	</p>
+
+	<p>
+		Let us take a concrete example for clarity.
+	</p>
+		 
+	<p>
+		x + y + z = 6 <br />
+		x<sup>2</sup> + y<sup>2</sup> + z<sup>2</sup> = 14 <br />
+		x<sup>3</sup> + y<sup>3</sup> + z<sup>3</sup> = 36 <br />
+	</p>
+
+	<p>
+		Here a = 6, b = 14 and c = 36 thus the cubic equation for &lambda; becomes 3 (1 - &lambda;) ( 2&lambda;<sup>2</sup> - 2&lambda; + 22 ) = 36 or &lambda;<sup>3</sup> - 12&lambda;<sup>2</sup> + 47&lambda; - 60 = 0.
+		The solutions for &lambda; = 3,5,4. The solutions of &lambda; and attendant values of &mu;, x,y, z as found by the above process are as follows:
+	</p>
+
+	<p>
+		&lambda; = 3, &mu; = 4 => x,y = 1,2 or x,y = 2,1 and z = 3 <br />
+		&lambda; = 5, &mu; = 12 => x,y = 2,3 or x,y = 3,2 and z = 1 <br />
+		&lambda; = 4, &mu; = 6 => x,y = 1,3 or x,y = 3,1 and z = 2 <br />
+	</p>
+
+	<p>
+		Thus it generates x = 1, y = 2, z = 3 and permutations thereof which one may easily see satisfy the original system.
+	</p>
+
+<div>
+	<hr>
+	<a href="/">Up</a> | <a href="mailto:watchingwaterfalls@gmail.com">Contact</a>
+</div>
+
+</body>
+
+</html>
