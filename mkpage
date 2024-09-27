@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# only argument needed is the title, which is taken from $@
+
 n=$(cat PAGES)
 n=$(( n + 1 ))
 
